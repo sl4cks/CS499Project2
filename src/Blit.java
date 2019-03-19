@@ -1,4 +1,4 @@
-public class Blit extends Osc 
+public class Blit extends Osc
 	{
 	public double sincm(double x, double m)
 		{
