@@ -17,8 +17,8 @@ public class Blit extends Osc
 		
 	// Note that BLIT will generate values below 0.  That's okay I guess, we're not using it
 	// as a serious audio output source, just scaled derivatives of it like saw.
-	
-    protected double tick(long tickCount, double d) 
+
+    protected double tick(long tickCount, double d)
     	{
     	double freq = Utils.valueToHz(getFrequencyMod().getValue());
     	double p = Config.SAMPLING_RATE / freq;
