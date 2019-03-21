@@ -1,5 +1,7 @@
-package PACKAGE_NAME;
+public class ResonanceMod extends Module {
 
-public class ResonanceMod {
-
+    @Override
+    public double tick(long tickCount) {
+        return 0;
+    }
 }
