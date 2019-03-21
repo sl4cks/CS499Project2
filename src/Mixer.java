@@ -33,6 +33,7 @@ public class Mixer extends Module {
         for (int i = 0; i < size; i ++) {
             output += input[i].getValue() * amplitudes[i].getValue();
         }
+        setValue(output);
         return output;
     }
 }
