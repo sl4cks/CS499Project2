@@ -15,16 +15,21 @@ public class Mixer extends Module {
         this.amplitudes = new Module[size];
    }
 
-   public void setInput(Module input1, Module input2, Module input3) {
-        input[0] = input1;
-        input[1] = input2;
-        input[2] = input3;
+   /*
+      NOTE: I probably need to fix this to use array as parameter
+    */
+   public void setInput(Module[] input) {
+        this.input = new Module[input.length];
+        for (int i = 0; i < input.length; i++) {
+            this.input[i] = input[i];
+        }
    }
 
-   public void setAmplitudes(Module amp1, Module amp2, Module amp3) {
-        amplitudes[0] = amp1;
-        amplitudes[1] = amp2;
-        amplitudes[2] = amp3;
+   public void setAmplitudes(Module[] amplitudes) {
+        this.amplitudes = new Module[amplitudes.length];
+        for (int i = 0; i < amplitudes.length; i++) {
+            this.amplitudes[i] = amplitudes[i];
+        }
    }
 
     @Override
