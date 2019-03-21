@@ -15,9 +15,6 @@ public class Mixer extends Module {
         this.amplitudes = new Module[size];
    }
 
-   /*
-      NOTE: I probably need to fix this to use array as parameter
-    */
    public void setInput(Module[] input) {
         this.input = new Module[input.length];
         for (int i = 0; i < input.length; i++) {
