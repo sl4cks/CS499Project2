@@ -5,11 +5,12 @@ public class BlitSquare extends BPBlit {
     public double square(long tickCount) {
         double alpha = 0.999;
         double val = alpha * prev + super.bpblit(tickCount);
-        prev = val;
         return val;
     }
 
     public double tick(long tickCount) {
-        return square(tickCount) * .75 + phase;
+        //update prev, probably wrong
+        prev = square(tickCount);
+        return prev;
     }
 }
