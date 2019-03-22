@@ -21,8 +21,10 @@ public class Filter extends Module {
     }
 
     // Algorithm 13
-    // Unsure if this
     public double tick(long tickCount) {
+        // Get incoming frequency, convert to hz
+        this.x0 = Utils.valueToHz(input.getValue());
+
         double sum = x0 * b0;
 
         for (int i = 0; i < a.length; i++) {
@@ -44,6 +46,6 @@ public class Filter extends Module {
         }
         x[0] = x0;  // Update first input array element to most current input
 
-        return sum;
+        return Utils.valueToHz(sum);
     }
 }
