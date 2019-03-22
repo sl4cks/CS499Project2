@@ -284,7 +284,7 @@ public class Synth {
         modules.add(blit);
         blit.setFrequencyMod(dial.getModule());
 
-        LPF filter = new LPF(blit);
+        Filter filter = new LPF(blit);
         modules.add(filter);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
