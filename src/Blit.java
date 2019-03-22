@@ -18,6 +18,8 @@ public class Blit extends Osc {
 
     protected double tick(long tickCount, double d) {
     	double freq = Utils.valueToHz(getFrequencyMod().getValue());
+		if(freq == 0)
+			return getValue();
     	double p = Config.SAMPLING_RATE / freq;
     	double m = Math.floor(p / 2.0) * 2.0 + 1.0;
     	double val = (m /p) * sincm((phase - d * p ) * m/p, m);
