@@ -1,24 +1,68 @@
 public class LPF extends Filter {
 
-    private Module cutoff =  new ConstantValue(Utils.hzToValue(0));  // default no cutoff
-    private Module resonanceMod = new ConstantValue(0.0);
+    /*
+     --- variables from Filter:
 
+    private Module input;
+    private double b0 = 1;  // default
+    private double[] b;
+    private double[] a;
+    private double[] x;  // for holding input at time i
+    private double[] y;  // for holding output at time i
+    private double x0;   // current input
+     */
+    private Module cutoffModule =  new ConstantValue(Utils.hzToValue(100.0));  // default no cutoffModule
+    private double cutoff;    // 2 * pi * (cutoff freq in Hz)
+    private Module resonanceMod = new ConstantValue(0.0);
+    private double Q = 1/Math.sqrt(2);   // default of no resonance
+
+
+    // TODO: Update constructor
     public LPF(Module input, double[] a, double[] b, double b0) {
         super(input, a, b, b0);
     }
 
-    public void setCutoff(Module frequency) {
-        this.cutoff = frequency;
+    public void setCutoffModule(Module frequency) {
+        this.cutoffModule = frequency;
+        updateCutoff();
     }
 
     public void setResonance (Module resonance) {
-        this.resonanceMod = resonance;
+        resonanceMod = resonance;
+        updateQ();
     }
 
-    // Returns the resonance (Q) as a value from 1/sqrt(2) to ~10.0
-    public double getQ() {
-        return resonanceMod.getValue() * 10 + 1 / Math.sqrt(2);
+    private void updateQ() {
+        Q = resonanceMod.getValue() * 10 + 1 / Math.sqrt(2);
     }
-   // Algorithm 14
+
+    // Converts the cutoff frequency into radians ( Hz * 2 * pi)
+    private void updateCutoff() {
+        cutoff = Utils.valueToHz(cutoffModule.getValue()) * 2 * Math.PI;
+    }
+
+
+    private void updateCoefficients() {
+        double K = cutoff * cutoff * Config.INV_SAMPLING_RATE * Config.INV_SAMPLING_RATE * Q;
+        double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + K;
+
+        // Calculate coefficients
+        b0 = 1/J * K;
+
+        b[0] = 1/J * 2 * K;
+        b[1] = 1/J *  K;
+        a[0] = 1/J * (-8 * Q + 2 * K);
+        a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + K);
+
+    }
+
+    // Todo: update this
+    public double tick(long tickCount) {
+        updateQ();
+        updateCutoff();
+        updateCoefficients();
+
+        return 0;
+    }
 
 }

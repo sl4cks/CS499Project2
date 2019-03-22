@@ -1,3 +1,4 @@
+/*
 // Copyright 2018 by George Mason University
 
 
@@ -7,18 +8,22 @@ import java.util.Random;
 import javax.swing.*;
 import java.awt.*;
 
+*/
 /**
  * DO NOT EDIT THIS SECTION BELOW (SEE BOTTOM OF FILES FOR WHERE TO UPDATE)
  * ==============================
  * VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
- **/
+ **//*
+
 public class Synth {
 
-    /**
+    */
+/**
      * Size of the Java SourceDataLine audio buffer.
      * Larger and we have more latency.  Smaller and the system can't handle it.
      * It appears &geq 1024 is required on the Mac for 44100 KHz
-     */
+     *//*
+
     public static final int BATCH_SIZE = 32;
     private Midi midi;
     // The current Mixer
@@ -31,12 +36,14 @@ public class Synth {
     private int buffpos = 0;
     // Audio buffer, which the audio output drains.
     private byte[] audioBuffer = new byte[BATCH_SIZE];
-    /*
+    */
+/*
       Random Number Generation
 
       Each Sound has its own random number generator.
       You can get a new, more or less statistically  independent generator from this method.
-    */
+    *//*
+
     private Object randomLock = new Object[0];
     private long randomSeed;
     private Random rnd = getNewRandom();
@@ -136,16 +143,20 @@ public class Synth {
             }
         }
 
-    /**
+    */
+/**
      * Returns the currently used Mixer
-     */
+     *//*
+
     public Mixer.Info getMixer() {
         return mixer;
         }
 
-    /**
+    */
+/**
      * Sets the currently used Mixer
-     */
+     *//*
+
     public void setMixer(Mixer.Info mixer) {
         try {
             if (sdl != null)
@@ -167,9 +178,11 @@ public class Synth {
             }
         }
 
-    /**
+    */
+/**
      * Returns the available mixers which support the given audio format.
-     */
+     *//*
+
     public Mixer.Info[] getSupportedMixers() {
         DataLine.Info lineInfo = new DataLine.Info(SourceDataLine.class, audioFormat);
         Mixer.Info[] info = AudioSystem.getMixerInfo();
@@ -199,9 +212,11 @@ public class Synth {
             }
         }
 
-    /**
+    */
+/**
      * Sample ranges from 0 to 1
-     */
+     *//*
+
     public void emitSample(double d) {
         int val = 0;
         if (d > 1.0) d = 1.0;
@@ -236,11 +251,13 @@ public class Synth {
             }
         }
 
-    /**
+    */
+/**
        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
        ==============================
        DO NOT EDIT THIS SECTION ABOVE
-    **/
+    **//*
+
 
 
     // ADJUST THIS VALUE IF YOU GET A LOT OF GLITCHY SOUND
@@ -249,9 +266,11 @@ public class Synth {
     // DON'T ADJUST THIS VALUE
     private static int bufferSize = numSamples * 2;
 
-    /**
+    */
+/**
      * MAKE YOUR EDITS TO THIS METHOD
-     **/
+     **//*
+
     public void setup() {
 
         MidiModule midimod = new MidiModule(getMidi());
@@ -288,3 +307,4 @@ public class Synth {
         
     }
 
+*/
