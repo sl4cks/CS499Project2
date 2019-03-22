@@ -9,8 +9,8 @@ public class BlitSquare extends BPBlit {
     }
 
     public double tick(long tickCount) {
-        //update prev, probably wrong
+        //update the previous value
         prev = square(tickCount);
-        return prev;
+        return prev * .75 + super.getPhaseMod();
     }
 }
