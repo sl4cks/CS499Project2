@@ -1,7 +1,8 @@
 /*
  * Implement a mixer which takes three inputs I1, I2, I3, and three
  * amplitudes A1, A2, A3, and performs I1 * A1 + I2 * A2 + I3 * A3.
- */
+ *//*
+
 
 
 public class Mixer extends Module {
@@ -39,3 +40,4 @@ public class Mixer extends Module {
         return output;
     }
 }
+*/

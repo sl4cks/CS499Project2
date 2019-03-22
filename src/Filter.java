@@ -1,13 +1,13 @@
 public class Filter extends Module {
 
     // Note: Referencing Algorithm 13/14, Filters notes
-    public Module input;
-    public double b0 = 1;  // default
-    public double[] b;
-    public double[] a;
-    public double[] x;  // for holding input at time i
-    public double[] y;  // for holding output at time i
-    public double x0;   // current input
+    Module input;
+    double b0 = 1;  // default
+    double[] b;
+    double[] a;
+    double[] x;  // for holding input at time i
+    double[] y;  // for holding output at time i
+    double x0;   // current input
 
     public Filter(Module input, double[] a, double[] b, double b0) {
         // Initialize x and y array elements all to zero

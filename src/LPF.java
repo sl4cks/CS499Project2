@@ -16,10 +16,9 @@ public class LPF extends Filter {
     private Module resonanceMod = new ConstantValue(0.0);
     private double Q = 1/Math.sqrt(2);   // default of no resonance
 
-
-    // TODO: Update constructor
     public LPF(Module input, double[] a, double[] b, double b0) {
         super(input, a, b, b0);
+        updateCoefficients();
     }
 
     public void setCutoffModule(Module frequency) {
@@ -41,7 +40,6 @@ public class LPF extends Filter {
         cutoff = Utils.valueToHz(cutoffModule.getValue()) * 2 * Math.PI;
     }
 
-
     private void updateCoefficients() {
         double K = cutoff * cutoff * Config.INV_SAMPLING_RATE * Config.INV_SAMPLING_RATE * Q;
         double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + K;
@@ -53,16 +51,14 @@ public class LPF extends Filter {
         b[1] = 1/J *  K;
         a[0] = 1/J * (-8 * Q + 2 * K);
         a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + K);
-
     }
 
-    // Todo: update this
     public double tick(long tickCount) {
         updateQ();
         updateCutoff();
         updateCoefficients();
+        return super.tick(tickCount);
 
-        return 0;
     }
 
 }
