@@ -268,10 +268,26 @@ public class Synth {
         // Here's our graphical interface
         Dial dial = new Dial(0.1);
         box.add(dial.getLabelledDial("Blit Frequency"));
-        
-        Blit blit = new Blit();
+
+        Dial resonance = new Dial(0.5);
+        box.add(resonance.getLabelledDial("Resonance"));
+
+        Dial LPFCutoff = new Dial(0.5);
+        box.add(LPFCutoff.getLabelledDial("LPF Cutoff Frequency"));
+/*
+        Osc osc = new Osc();
+        modules.add(osc);
+        LPF filter = new LPF(osc);
+*/
+
+        Blit blit = new BlitSaw();
         modules.add(blit);
         blit.setFrequencyMod(dial.getModule());
+
+        LPF filter = new LPF(blit);
+        modules.add(filter);
+        filter.setFrequencyMod(LPFCutoff.getModule());
+        filter.setResonanceMod(resonance.getModule());
 
         Oscilloscope oscope = new Oscilloscope();
         Oscilloscope.OModule omodule = oscope.getModule();
@@ -279,8 +295,8 @@ public class Synth {
         modules.add(omodule);
         omodule.setAmplitudeModule(blit);
         box.add(oscope);
-        
-        setOutput(blit);
+//        setOutput(blit);
+        setOutput(filter);
 
         frame.pack();
         frame.setVisible(true);

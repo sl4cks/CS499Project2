@@ -16,17 +16,18 @@ public class LPF extends Filter {
     private Module resonanceMod = new ConstantValue(0.0);
     private double Q = 1/Math.sqrt(2);   // default of no resonance
 
-    public LPF(Module input, double[] a, double[] b, double b0) {
-        super(input, a, b, b0);
-        updateCoefficients();
+    public LPF(Module input) {
+        super(input, new double[] {0,0}, new double[] {0,0}, 1);
     }
 
-    public void setCutoffModule(Module frequency) {
+    @Override
+    public void setFrequencyMod(Module frequency) {
         this.cutoffModule = frequency;
         updateCutoff();
     }
 
-    public void setResonance (Module resonance) {
+    @Override
+    public void setResonanceMod (Module resonance) {
         resonanceMod = resonance;
         updateQ();
     }
@@ -35,7 +36,7 @@ public class LPF extends Filter {
         Q = resonanceMod.getValue() * 10 + 1 / Math.sqrt(2);
     }
 
-    // Converts the cutoff frequency into radians ( Hz * 2 * pi)
+    // Updates and converts the cutoff frequency into radians ( Hz * 2 * pi)
     private void updateCutoff() {
         cutoff = Utils.valueToHz(cutoffModule.getValue()) * 2 * Math.PI;
     }
