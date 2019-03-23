@@ -266,9 +266,6 @@ public class Synth {
         modules.add(gate);
 
         // Here's our graphical interface
-        Dial dial = new Dial(0.1);
-        box.add(dial.getLabelledDial("Blit Frequency"));
-
         Dial resonance = new Dial(0.5);
         box.add(resonance.getLabelledDial("Resonance"));
 
@@ -280,11 +277,32 @@ public class Synth {
         LPF filter = new LPF(osc);
 */
 
-        Blit blit = new BlitSaw();
-        modules.add(blit);
-        blit.setFrequencyMod(dial.getModule());
+        Blit blit1 = new BlitSaw();
+        modules.add(blit1);
 
-        Filter filter = new LPF(blit);
+        Blit blit2 = new BlitSaw();
+        modules.add(blit2);
+
+        Blit blit3 = new BlitSaw();
+        modules.add(blit2);
+
+        Blit[] inputs = {blit1,blit2,blit3};
+
+        //iterate over each input and create dials/mixer for them
+        MixerModule mixer = new MixerModule();
+        for(int i = 0; i < inputs.length; i++) {
+            Dial freq = new Dial(0.1);
+            box.add(freq.getLabelledDial("Blit Frequency"));
+            inputs[i].setFrequencyMod(freq.getModule());
+
+            Dial mix = new Dial(1);
+            box.add(mix.getLabelledDial("Mixer "+i));
+            mixer.setAmplitude(mix.getModule(), i);
+        }
+        mixer.setInput(inputs);
+        modules.add(mixer);
+
+        Filter filter = new LPF(mixer);
         modules.add(filter);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
@@ -293,7 +311,7 @@ public class Synth {
         Oscilloscope.OModule omodule = oscope.getModule();
         oscope.setDelay(1);
         modules.add(omodule);
-        omodule.setAmplitudeModule(blit);
+        omodule.setAmplitudeModule(blit1);
         box.add(oscope);
 //        setOutput(blit);
         setOutput(filter);
