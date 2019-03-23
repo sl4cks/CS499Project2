@@ -15,8 +15,8 @@ import java.util.concurrent.locks.*;
 
 public class Oscilloscope extends JComponent
     {
-    public static final int WAVE_SIZE = 100;
-    public static final int WAVE_HEIGHT = 100;
+    public static final int WAVE_SIZE = 250;
+    public static final int WAVE_HEIGHT = 250;
     public static final int BORDER = 8;
     public static final float STROKE_WIDTH = 1f;
     
