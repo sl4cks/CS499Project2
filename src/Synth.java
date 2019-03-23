@@ -302,7 +302,7 @@ public class Synth {
         mixer.setInput(inputs);
         modules.add(mixer);
 
-        Filter filter = new LPF(mixer);
+        Filter filter = new HPF(mixer);
         modules.add(filter);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
