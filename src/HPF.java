@@ -1,3 +1,7 @@
+/*
+    2-Pole Butterworth High-Pass Filter
+ */
+
 public class HPF extends Filter {
 
     private Module cutoffModule =  new ConstantValue(Utils.hzToValue(100.0));  // default no cutoffModule
@@ -48,7 +52,5 @@ public class HPF extends Filter {
         updateCutoff();
         updateCoefficients();
         return super.tick(tickCount);
-
     }
-
 }

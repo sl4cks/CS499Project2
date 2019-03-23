@@ -1,15 +1,11 @@
-/*
-    2-pole Butterworth Low-Pass Filter
- */
-
-public class LPF extends Filter {
+public class NotchFilter extends Filter{
 
     private Module cutoffModule =  new ConstantValue(Utils.hzToValue(100.0));  // default no cutoffModule
     private double cutoff;    // 2 * pi * (cutoff freq in Hz)
     private Module resonanceMod = new ConstantValue(0.0);
     private double Q = 1/Math.sqrt(2);   // default of no resonance
 
-    public LPF(Module input) {
+    public NotchFilter(Module input) {
         super(input, new double[] {0,0}, new double[] {0,0}, 1);
     }
 
@@ -35,16 +31,15 @@ public class LPF extends Filter {
     }
 
     private void updateCoefficients() {
-        double K = cutoff * cutoff * Config.INV_SAMPLING_RATE * Config.INV_SAMPLING_RATE * Q;
-        double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + K;
+        double K = cutoff * cutoff * Config.INV_SAMPLING_RATE * Config.INV_SAMPLING_RATE;
+        double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + Q * K;
 
         // Calculate coefficients
-        b0 = 1/J * K;
-
-        b[0] = 1/J * 2 * K;
-        b[1] = 1/J *  K;
-        a[0] = 1/J * (-8 * Q + 2 * K);
-        a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + K);
+        b0 = 1/J * Q*(4 + K) ;
+        b[0] = 1/J * Q*(-8 + 2 * K);
+        b[1] = 1/J * Q*(4 + K);
+        a[0] = 1/J * (-8 * Q + Q * 2 * K);
+        a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + Q * K);
     }
 
     public double tick(long tickCount) {

@@ -57,7 +57,7 @@ B) FILTERS
         a lot higher, maybe 10 or so at 1.0, your choice.  Your LPF should implement 
         the 2-pole low-pass Butterworth filter in the lecture notes.  
 
-3. If you were really cool, you'd implement an HPF, BPF, and NotchFilter.
+3. If you were really cool, you'd implement an HPF, BandPassFilter, and NotchFilter.
 
 
 C) MIXER

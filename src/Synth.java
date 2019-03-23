@@ -5,7 +5,6 @@ import javax.sound.sampled.*;
 import java.util.ArrayList;
 import java.util.Random;
 import javax.swing.*;
-import java.awt.*;
 
 /**
  * DO NOT EDIT THIS SECTION BELOW (SEE BOTTOM OF FILES FOR WHERE TO UPDATE)
@@ -270,13 +269,14 @@ public class Synth {
         box.add(resonance.getLabelledDial("Resonance"));
 
         Dial LPFCutoff = new Dial(0.5);
-        box.add(LPFCutoff.getLabelledDial("LPF Cutoff Frequency"));
-/*
+        box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
+
+        /*
         Osc osc = new Osc();
         modules.add(osc);
-        LPF filter = new LPF(osc);
-*/
 
+        Filter filter = new HPF(osc);
+*/
         Blit blit1 = new BlitSaw();
         modules.add(blit1);
 
@@ -302,7 +302,7 @@ public class Synth {
         mixer.setInput(inputs);
         modules.add(mixer);
 
-        Filter filter = new HPF(mixer);
+        Filter filter = new BandPassFilter(mixer);
         modules.add(filter);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());

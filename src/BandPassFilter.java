@@ -1,15 +1,15 @@
 /*
-    2-pole Butterworth Low-Pass Filter
+    2-Pole Butterworth Band Pass Filter
  */
 
-public class LPF extends Filter {
+public class BandPassFilter extends Filter {
 
     private Module cutoffModule =  new ConstantValue(Utils.hzToValue(100.0));  // default no cutoffModule
     private double cutoff;    // 2 * pi * (cutoff freq in Hz)
     private Module resonanceMod = new ConstantValue(0.0);
     private double Q = 1/Math.sqrt(2);   // default of no resonance
 
-    public LPF(Module input) {
+    public BandPassFilter(Module input) {
         super(input, new double[] {0,0}, new double[] {0,0}, 1);
     }
 
@@ -39,10 +39,10 @@ public class LPF extends Filter {
         double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + K;
 
         // Calculate coefficients
-        b0 = 1/J * K;
+        b0 = 1/J * 2 * cutoff * Q * Q * Config.INV_SAMPLING_RATE;
 
-        b[0] = 1/J * 2 * K;
-        b[1] = 1/J *  K;
+        b[0] = 0;
+        b[1] = 1/J *  (-2 * cutoff * Q * Q * Config.INV_SAMPLING_RATE);
         a[0] = 1/J * (-8 * Q + 2 * K);
         a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + K);
     }

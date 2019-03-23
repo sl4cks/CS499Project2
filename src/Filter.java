@@ -1,3 +1,7 @@
+/*
+    Base class for digital filters
+ */
+
 public class Filter extends Module {
 
     // Note: Referencing Algorithm 13/14, Filters notes
