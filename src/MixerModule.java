@@ -13,11 +13,12 @@ public class MixerModule extends Module {
         this.amplitudes = new Module[size];
    }
 
+   public int getSize() {
+        return this.size;
+   }
+
    public void setInput(Module[] input) {
-        this.input = new Module[input.length];
-        for (int i = 0; i < input.length; i++) {
-            this.input[i] = input[i];
-        }
+        this.input = input;
    }
 
    public void setInput(Module input, int i) {
@@ -27,10 +28,7 @@ public class MixerModule extends Module {
    }
 
    public void setAmplitude(Module[] amplitudes) {
-        this.amplitudes = new Module[amplitudes.length];
-        for (int i = 0; i < amplitudes.length; i++) {
-            this.amplitudes[i] = amplitudes[i];
-        }
+        this.amplitudes = amplitudes;
    }
 
    public void setAmplitude(Module amp, int i) {
