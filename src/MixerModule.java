@@ -1,17 +1,17 @@
 /*
  * Implement a mixer which takes three inputs I1, I2, I3, and three
  * amplitudes A1, A2, A3, and performs I1 * A1 + I2 * A2 + I3 * A3.
- *//*
+ */
 
 
 
-public class Mixer extends Module {
+public class MixerModule extends Module {
 
     private int size = 3;
     private Module[] input;
     private Module[] amplitudes;
 
-    public Mixer() {
+    public MixerModule() {
         this.input = new Module[size];
         this.amplitudes = new Module[size];
    }
@@ -40,4 +40,3 @@ public class Mixer extends Module {
         return output;
     }
 }
-*/
