@@ -7,7 +7,7 @@ import java.util.concurrent.locks.*;
 
 public class Dial extends JPanel {
 
-  public static final int LABELLED_DIAL_WIDTH = 20;
+  public static final int LABELLED_DIAL_WIDTH = 40;
   public static final float DIAL_STROKE_WIDTH = 4.0f;
   public static final Color MOD_COLOR = Color.BLACK;
   public static final BasicStroke DIAL_THIN_STROKE = new BasicStroke(DIAL_STROKE_WIDTH / 2,
@@ -20,7 +20,7 @@ public class Dial extends JPanel {
   // The distance the mouse travels to go 0...1
   public static final int SCALE = 256;
 
-  boolean dynamicallyChanging = false;
+  boolean dynamicallyChanging = true;
   Color staticColor = MOD_COLOR;
 
   // The state when the mouse was pressed
