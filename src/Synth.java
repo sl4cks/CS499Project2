@@ -292,11 +292,11 @@ public class Synth {
         MixerModule mixer = new MixerModule();
         for(int i = 0; i < inputs.length; i++) {
             Dial freq = new Dial(0.1);
-            box.add(freq.getLabelledDial("Blit Frequency"));
+            box.add(freq.getLabelledDial("Blit Frequency " + i));
             inputs[i].setFrequencyMod(freq.getModule());
 
             Dial mix = new Dial(1);
-            box.add(mix.getLabelledDial("Mixer "+i));
+            box.add(mix.getLabelledDial("Mixer " + i));
             mixer.setAmplitude(mix.getModule(), i);
         }
         mixer.setInput(inputs);
