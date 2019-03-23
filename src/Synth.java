@@ -265,44 +265,49 @@ public class Synth {
         modules.add(gate);
 
         // Here's our graphical interface
-        Dial resonance = new Dial(0.5);
-        box.add(resonance.getLabelledDial("Resonance"));
-
-        Dial LPFCutoff = new Dial(0.5);
-        box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
 
         /*
         Osc osc = new Osc();
         modules.add(osc);
-
         Filter filter = new HPF(osc);
 */
-        Blit blit1 = new BlitSaw();
+        Osc blit1 = new BlitSaw();
         modules.add(blit1);
 
-        Blit blit2 = new BlitSaw();
+        Osc blit2 = new BlitSaw();
         modules.add(blit2);
 
-        Blit blit3 = new BlitSaw();
-        modules.add(blit2);
+        Osc blit3  = new BlitSquare();
+        modules.add(blit3);
 
-        Blit[] inputs = {blit1,blit2,blit3};
+        Osc[] inputs = {blit1,blit2,blit3};
+        String[] inputLabels = {"BlitSaw", "BlitSaw", "BlitSquare"};
 
         //iterate over each input and create dials/mixer for them
         MixerModule mixer = new MixerModule();
         for(int i = 0; i < inputs.length; i++) {
             Dial freq = new Dial(0.1);
-            box.add(freq.getLabelledDial("Blit Frequency " + i));
+            box.add(freq.getLabelledDial("Freq " + i + " - " + inputLabels[i]));
             inputs[i].setFrequencyMod(freq.getModule());
 
             Dial mix = new Dial(1);
             box.add(mix.getLabelledDial("Mixer " + i));
             mixer.setAmplitude(mix.getModule(), i);
+            box.add(Box.createVerticalStrut(20));
         }
         mixer.setInput(inputs);
         modules.add(mixer);
 
-        Filter filter = new BandPassFilter(mixer);
+        // Add filter dials
+        Dial resonance = new Dial(0.5);
+        box.add(resonance.getLabelledDial("Resonance"));
+
+        Dial LPFCutoff = new Dial(0.2);
+        box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
+
+
+        // Create Filter and attach dial modules
+        Filter filter = new LPF(mixer);
         modules.add(filter);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
@@ -313,6 +318,8 @@ public class Synth {
         modules.add(omodule);
         omodule.setAmplitudeModule(blit1);
         box.add(oscope);
+
+        box.add(Box.createVerticalStrut(10));
 //        setOutput(blit);
         setOutput(filter);
 
