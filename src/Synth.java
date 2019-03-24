@@ -264,7 +264,13 @@ public class Synth {
         MidiGate gate = new MidiGate(midimod);
         modules.add(gate);
 
-        // Here's our graphical interface
+        // Create Detuners array for our oscillators
+        Detuner[] detuners = new Detuner[3] ;
+        for (int i = 0; i < 3; i++) {
+            detuners[i] = new Detuner(midimod);
+            modules.add(detuners[i]);
+        }
+
         Blit blit1 = new BlitSaw();
         modules.add(blit1);
 
@@ -280,13 +286,20 @@ public class Synth {
         //iterate over each input and create dials/mixer for them
         MixerModule mixer = new MixerModule();
         for(int i = 0; i < inputs.length; i++) {
-            Dial freq = new Dial(0.1);
-            box.add(freq.getLabelledDial("Freq " + i + " - " + inputLabels[i]));
-            inputs[i].setFrequencyMod(midimod);
+            Dial freq = new Dial(0.5);
+            box.add(freq.getLabelledDial("Detune " + i + " - " + inputLabels[i]));
 
+            //Link the dials to control our detuners for each oscillator
+            detuners[i].setDetuneMod(freq.getModule());
+
+            // Set out inputs to take the detuner-controlled frequency input
+            inputs[i].setFrequencyMod(detuners[i]);
+
+            // Add the mixer dials
             Dial mix = new Dial(1);
             box.add(mix.getLabelledDial("Mixer " + i));
             mixer.setAmplitude(mix.getModule(), i);
+
             box.add(Box.createVerticalStrut(20));
         }
         mixer.setInput(inputs);

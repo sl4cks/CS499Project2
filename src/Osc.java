@@ -4,8 +4,6 @@
 public class Osc extends Module {
   public double state = 0;
 
-  // Module that provides the amount by which to detune the Osc's frequency
-  private Module detuneMod = new ConstantValue(0.0);
 
   private Module frequencyMod = new ConstantValue(Utils.hzToValue(220));
 
@@ -15,11 +13,6 @@ public class Osc extends Module {
 
   public Module getFrequencyMod() {
     return this.frequencyMod;
-  }
-
-  public void setDetuneMod(Module detuneMod) {
-    this.detuneMod = detuneMod;
-//    double scale = (detuneMod.getValue() -0.5) * 2
   }
 
   public double tick(long tickCount) {
