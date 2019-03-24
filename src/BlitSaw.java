@@ -2,7 +2,7 @@ public class BlitSaw extends Blit {
 
     private double prev = 0;
 
-    public double tick(long tickCount) {
+    public double saw(long tickCount) {
         double val;
         if(tickCount <= 0)
             val = 0;
@@ -15,8 +15,13 @@ public class BlitSaw extends Blit {
             double alpha = 1 - (1 / p);
             val = alpha * prev + super.tick(tickCount) - (1 / p);
         }
-        //change previous value to the new value
-        prev = val;
         return val;
+    }
+
+    public double tick(long tickCount) {
+        //update prev
+        prev = saw(tickCount);
+        //return scaled value
+        return prev * 0.8 + 0.5;
     }
 }
