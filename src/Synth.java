@@ -316,15 +316,23 @@ public class Synth {
         Oscilloscope.OModule omodule = oscope.getModule();
         oscope.setDelay(1);
         modules.add(omodule);
-        omodule.setAmplitudeModule(blit1);
+        omodule.setAmplitudeModule(filter);
         box.add(oscope);
 
         box.add(Box.createVerticalStrut(10));
 //        setOutput(blit);
-        setOutput(filter);
+
+        Dial dial = new Dial(1.0);
+        box.add(dial.getLabelledDial("Gain"));
+
+        Amplifier gain = new Amplifier(filter);
+        gain.setAmplitudeMod(dial.getModule());
+        modules.add(gain);
 
         frame.pack();
         frame.setVisible(true);
+
+        setOutput(gain);
         }
         
     }
