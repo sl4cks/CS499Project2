@@ -1,7 +1,6 @@
 public class BlitSquare extends BPBlit {
 
     private double prev = 0;
-    //maintain separate previous value for the square
 
     public double square(long tickCount) {
         double alpha = 0.999;
