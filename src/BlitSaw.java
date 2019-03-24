@@ -8,6 +8,9 @@ public class BlitSaw extends Blit {
             val = 0;
         else {
             double freq = Utils.valueToHz(getFrequencyMod().getValue());
+            //catch divide by 0
+            if(freq == 0)
+                return getValue();
             double p = Config.SAMPLING_RATE / freq;
             double alpha = 1 - (1 / p);
             val = alpha * prev + super.tick(tickCount) - (1 / p);
