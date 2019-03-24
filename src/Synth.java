@@ -287,6 +287,22 @@ public class Synth {
         MixerModule mixer = new MixerModule();
         for(int i = 0; i < inputs.length; i++) {
             Dial freq = new Dial(0.5);
+            Dial mix = new Dial(1.0);
+
+            // Edit default detune/mix value 0
+            if (i == 0) {
+                // Enter custom settings here
+            }
+            // Edit default detune/mix value 1
+            if (i == 1) {
+                freq.getModule().setValue(0.7578);
+            }
+            // Edit default detune/mix value 2
+            if (i == 2) {
+                freq.getModule().setValue(0.6289);
+                mix.getModule().setValue(0.6875);
+            }
+
             box.add(freq.getLabelledDial("Detune " + i + " - " + inputLabels[i]));
 
             //Link the dials to control our detuners for each oscillator
@@ -296,19 +312,21 @@ public class Synth {
             inputs[i].setFrequencyMod(detuners[i]);
 
             // Add the mixer dials
-            Dial mix = new Dial(1);
             box.add(mix.getLabelledDial("Mixer " + i));
             mixer.setAmplitude(mix.getModule(), i);
 
             box.add(Box.createVerticalStrut(20));
         }
+
+        // Edit the starting default values.
+
         mixer.setInput(inputs);
         modules.add(mixer);
 
         Blit trem = new Blit();
         modules.add(trem);
 
-        Dial tremFreq = new Dial(0.1);
+       Dial tremFreq = new Dial(0.3461);
         box.add(tremFreq.getLabelledDial("Stutter"));
         trem.setFrequencyMod(tremFreq.getModule());
 
