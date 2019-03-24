@@ -292,6 +292,17 @@ public class Synth {
         mixer.setInput(inputs);
         modules.add(mixer);
 
+        Blit trem = new Blit();
+        modules.add(trem);
+
+        Dial tremFreq = new Dial(0.1);
+        box.add(tremFreq.getLabelledDial("Stutter"));
+        trem.setFrequencyMod(tremFreq.getModule());
+
+        Amplifier tremolo = new Amplifier(mixer);
+        tremolo.setAmplitudeMod(trem);
+        modules.add(tremolo);
+
         // Add filter dials
         Dial resonance = new Dial(0.5);
         box.add(resonance.getLabelledDial("Resonance"));
@@ -300,7 +311,7 @@ public class Synth {
         box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
 
         // Create Filter and attach dial modules
-        Filter filter = new LPF(mixer);
+        Filter filter = new LPF(tremolo);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
         modules.add(filter);
