@@ -265,24 +265,23 @@ public class Synth {
         modules.add(gate);
 
         // Here's our graphical interface
-        Osc blit1 = new BlitSaw();
+        Blit blit1 = new BlitSaw();
         modules.add(blit1);
 
-        Osc blit2 = new BlitSaw();
+        Blit blit2 = new BlitSquare();
         modules.add(blit2);
 
-        Osc blit3  = new BlitSaw();
+        Blit blit3  = new BlitSaw();
         modules.add(blit3);
 
         Osc[] inputs = {blit1,blit2,blit3};
-        String[] inputLabels = {"BlitSaw", "BlitSaw", "BlitSaw"};
+        String[] inputLabels = {"BlitSaw", "BlitSquare", "BlitSaw"};
 
         //iterate over each input and create dials/mixer for them
         MixerModule mixer = new MixerModule();
         for(int i = 0; i < inputs.length; i++) {
             Dial freq = new Dial(0.1);
             box.add(freq.getLabelledDial("Freq " + i + " - " + inputLabels[i]));
-//            inputs[i].setFrequencyMod(freq.getModule());
             inputs[i].setFrequencyMod(midimod);
 
             Dial mix = new Dial(1);
@@ -293,29 +292,6 @@ public class Synth {
         mixer.setInput(inputs);
         modules.add(mixer);
 
-        ADSR adsr = new ADSR(gate);
-        modules.add(adsr);
-
-        //initialize the values that should be changed by the user
-        String[] labels = {"Attack Rate", "Delay Rate", "Sustain Level", "Release Rate"};
-        for (int i = 0; i < 4; i++) {
-            Dial dial = new Dial(0.5);
-            box.add(dial.getLabelledDial(labels[i]));
-            if(i == 2) {
-                Dial attack = new Dial(0.5);
-                box.add(attack.getLabelledDial("Attack Level"));
-                adsr.setLevel(i, dial.getModule());
-            }
-            //check if we set sustain, a level
-            else if(i == 2)
-                adsr.setLevel(i, dial.getModule());
-            else
-                adsr.setRate(i, dial.getModule());
-        }
-
-        Amplifier adsrAmp = new Amplifier(mixer);
-        adsrAmp.setAmplitudeMod(adsr);
-
         // Add filter dials
         Dial resonance = new Dial(0.5);
         box.add(resonance.getLabelledDial("Resonance"));
@@ -323,12 +299,11 @@ public class Synth {
         Dial LPFCutoff = new Dial(0.2);
         box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
 
-
         // Create Filter and attach dial modules
-        Filter filter = new LPF(adsrAmp);
-        modules.add(filter);
+        Filter filter = new LPF(mixer);
         filter.setFrequencyMod(LPFCutoff.getModule());
         filter.setResonanceMod(resonance.getModule());
+        modules.add(filter);
 
         Oscilloscope oscope = new Oscilloscope();
         Oscilloscope.OModule omodule = oscope.getModule();
@@ -339,8 +314,8 @@ public class Synth {
 
         box.add(Box.createVerticalStrut(10));
 
-        Amplifier gateAmp = new Amplifier(mixer);
-        gateAmp.setAmplitudeMod(adsr);
+        Amplifier gateAmp = new Amplifier(filter);
+        gateAmp.setAmplitudeMod(gate);
         modules.add(gateAmp);
 
         Dial dial = new Dial(1.0);
