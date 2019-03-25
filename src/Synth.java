@@ -252,6 +252,25 @@ public class Synth {
      * MAKE YOUR EDITS TO THIS METHOD
      **/
     public void setup() {
+        // Default values for various modules:
+             // No detuning = 0.5
+        double pitchVal = 0.5547;     // overall pitch
+        double stutterVal = 0.3461;
+        double resonanceVal = 0.8945;
+        double filterCutoffVal = 0.2234;
+
+        // Detuning values for each oscillator
+        double osc0DetuneVal = 0.5;
+        double osc1DetuneVal = 0.7578;
+        double osc2DetuneVal = 0.6289;
+
+        // Mix values for each oscillator
+        double osc0MixVal = 1.0;
+        double osc1MixVal = 1.0;
+        double osc2MixVal = 0.7813;
+
+        // Set the default gain value
+        double gainVal = 1.0;
 
         MidiModule midimod = new MidiModule(getMidi());
         modules.add(midimod);
@@ -264,13 +283,20 @@ public class Synth {
         MidiGate gate = new MidiGate(midimod);
         modules.add(gate);
 
-        // Create Detuners array for our oscillators
+        // Create an overall pitch/detuner control dial
+        Detuner pitch = new Detuner(midimod);
+        Dial pitchDial= new Dial(pitchVal);
+        pitch.setDetuneMod(pitchDial.getModule());
+        modules.add(pitch);
+
+        // Create Detuners for each of our oscillators
         Detuner[] detuners = new Detuner[3] ;
         for (int i = 0; i < 3; i++) {
-            detuners[i] = new Detuner(midimod);
+            detuners[i] = new Detuner(pitch);
             modules.add(detuners[i]);
         }
 
+        // Create our three oscillators
         Blit blit1 = new BlitSaw();
         modules.add(blit1);
 
@@ -289,18 +315,20 @@ public class Synth {
             Dial freq = new Dial(0.5);
             Dial mix = new Dial(1.0);
 
-            // Edit default detune/mix value 0
+            // Update to default detune/mix value for osc 0
             if (i == 0) {
-                // Enter custom settings here
+                freq.getModule().setValue(osc0DetuneVal);
+                mix.getModule().setValue(osc0MixVal);
             }
-            // Edit default detune/mix value 1
+            // Update to default detune/mix value for osc 1
             if (i == 1) {
-                freq.getModule().setValue(0.7578);
+                freq.getModule().setValue(osc1DetuneVal);
+                mix.getModule().setValue(osc1MixVal);
             }
-            // Edit default detune/mix value 2
+            // Update to default detune/mix value for osc 2
             if (i == 2) {
-                freq.getModule().setValue(0.6289);
-                mix.getModule().setValue(0.6875);
+                freq.getModule().setValue(osc2DetuneVal);
+                mix.getModule().setValue(osc2MixVal);
             }
 
             box.add(freq.getLabelledDial("Detune " + i + " - " + inputLabels[i]));
@@ -318,15 +346,16 @@ public class Synth {
             box.add(Box.createVerticalStrut(20));
         }
 
-        // Edit the starting default values.
-
         mixer.setInput(inputs);
         modules.add(mixer);
 
         Blit trem = new Blit();
         modules.add(trem);
 
-       Dial tremFreq = new Dial(0.3461);
+        // Add the dial for controlling the overall pitch/detune
+        box.add(pitchDial.getLabelledDial("Pitch (master)"));
+
+        Dial tremFreq = new Dial(stutterVal);
         box.add(tremFreq.getLabelledDial("Stutter"));
         trem.setFrequencyMod(tremFreq.getModule());
 
@@ -335,10 +364,10 @@ public class Synth {
         modules.add(tremolo);
 
         // Add filter dials
-        Dial resonance = new Dial(0.5);
+        Dial resonance = new Dial(resonanceVal);
         box.add(resonance.getLabelledDial("Resonance"));
 
-        Dial LPFCutoff = new Dial(0.2);
+        Dial LPFCutoff = new Dial(filterCutoffVal);
         box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
 
         // Create Filter and attach dial modules
@@ -360,7 +389,7 @@ public class Synth {
         gateAmp.setAmplitudeMod(gate);
         modules.add(gateAmp);
 
-        Dial dial = new Dial(1.0);
+        Dial dial = new Dial(gainVal);
         box.add(dial.getLabelledDial("Gain"));
 
         Amplifier gain = new Amplifier(gateAmp);
