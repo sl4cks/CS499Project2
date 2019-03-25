@@ -370,6 +370,9 @@ public class Synth {
         Dial LPFCutoff = new Dial(filterCutoffVal);
         box.add(LPFCutoff.getLabelledDial("Filter Cutoff Frequency"));
 
+        Dial dial = new Dial(gainVal);
+        box.add(dial.getLabelledDial("Gain"));
+
         // Create Filter and attach dial modules
         Filter filter = new LPF(tremolo);
         filter.setFrequencyMod(LPFCutoff.getModule());
@@ -388,10 +391,6 @@ public class Synth {
         Amplifier gateAmp = new Amplifier(filter);
         gateAmp.setAmplitudeMod(gate);
         modules.add(gateAmp);
-
-        Dial dial = new Dial(gainVal);
-        box.add(dial.getLabelledDial("Gain"));
-
         Amplifier gain = new Amplifier(gateAmp);
         gain.setAmplitudeMod(dial.getModule());
         modules.add(gain);
