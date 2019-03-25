@@ -1,5 +1,9 @@
 /*
     Base class for digital filters
+
+    Note: Ideally this class could be refactored to reduce the redundant
+    code that's currently in the filter subclasses (LPF, HPF, BandPassFilter,
+    and NotchFilter.
  */
 
 public class Filter extends Module {

@@ -8,15 +8,13 @@ import javax.swing.*;
 
 /**
  * DO NOT EDIT THIS SECTION BELOW (SEE BOTTOM OF FILES FOR WHERE TO UPDATE)
- * ==============================
- * VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
+ * ============================== VVVVVVVVVVVVVVVVVVVVVVVVVVVVVV
  **/
 public class Synth {
 
     /**
-     * Size of the Java SourceDataLine audio buffer.
-     * Larger and we have more latency.  Smaller and the system can't handle it.
-     * It appears &geq 1024 is required on the Mac for 44100 KHz
+     * Size of the Java SourceDataLine audio buffer. Larger and we have more latency.  Smaller and
+     * the system can't handle it. It appears &geq 1024 is required on the Mac for 44100 KHz
      */
     public static final int BATCH_SIZE = 32;
     private Midi midi;
@@ -46,125 +44,125 @@ public class Synth {
 
     public Synth() {
         randomSeed = System.currentTimeMillis();
-        }
+    }
 
-    public void setOutput(Module outputModule) { this.outputModule = outputModule; }
-    public Module getOutput() { return outputModule; }
-        
-    public void setMidi(Midi midi) { this.midi = midi; }
-    public Midi getMidi() { return midi; }
-        
+    public void setOutput(Module outputModule) {
+        this.outputModule = outputModule;
+    }
+
+    public Module getOutput() {
+        return outputModule;
+    }
+
+    public void setMidi(Midi midi) {
+        this.midi = midi;
+    }
+
+    public Midi getMidi() {
+        return midi;
+    }
+
 
     public static int getInt(String s) {
         try {
             return (Integer.parseInt(s));
-            } catch (NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             return -1;
-            }
         }
+    }
 
-    public static void showDevices(Midi midi, Mixer.Info[] mixers)
-        {
+    public static void showDevices(Midi midi, Mixer.Info[] mixers) {
         midi.displayDevices();
         System.err.println("\nAUDIO DEVICES:");
-        for (int i = 0; i < mixers.length; i++)
+        for (int i = 0; i < mixers.length; i++) {
             System.err.println("" + i + ":\t" + mixers[i].getName());
-
-        System.err.println("\nFormat:\n\tjava Synth\t\t\t[displays available devices]\n\tjava Synth [midi] [audio]\t[runs synth with the given device numbers]");
         }
 
-    public static void main(String[] args) 
-        {
+        System.err.println(
+            "\nFormat:\n\tjava Synth\t\t\t[displays available devices]\n\tjava Synth [midi] [audio]\t[runs synth with the given device numbers]");
+    }
+
+    public static void main(String[] args) {
         Midi midi = new Midi();
         Synth synth = new Synth();
         synth.audioFormat = new AudioFormat(Config.SAMPLING_RATE, 16, 1, true, false);
         Mixer.Info[] mixers = synth.getSupportedMixers();
 
-        if (args.length == 0) 
-            {
+        if (args.length == 0) {
             showDevices(midi, mixers);
-            }
-        else if (args.length == 2) 
-            {
+        } else if (args.length == 2) {
             int x = getInt(args[0]);
             ArrayList<Midi.MidiDeviceWrapper> in = midi.getInDevices();
-            if (x >= 0 && x < in.size()) 
-                {
+            if (x >= 0 && x < in.size()) {
                 midi.setInDevice(in.get(x));
                 System.err.println("MIDI: " + in.get(x));
 
-                if (mixers == null)
-                    {
-                    System.err.println("No output found which supports the desired sampling rate and bit depth\n");
+                if (mixers == null) {
+                    System.err.println(
+                        "No output found which supports the desired sampling rate and bit depth\n");
                     showDevices(midi, mixers);
                     System.exit(1);
-                    }
-                else
-                    {
+                } else {
                     x = getInt(args[1]);
-                    if (x >= 0 && x < mixers.length)
-                        {
+                    if (x >= 0 && x < mixers.length) {
                         synth.setMixer(mixers[x]);
-                        System.err.println("Audio: " + mixers[x].getName());                                            
+                        System.err.println("Audio: " + mixers[x].getName());
                         synth.setMidi(midi);
                         synth.setup();
                         synth.go();
                         synth.sdl.drain();
                         synth.sdl.close();
-                        }
-                    else
-                        {
+                    } else {
                         System.err.println("Invalid Audio number " + args[1] + "\n");
                         showDevices(midi, mixers);
                         System.exit(1);
-                        }
                     }
                 }
-            else 
-                {
+            } else {
                 System.err.println("Invalid MIDI number " + args[0] + "\n");
                 showDevices(midi, mixers);
                 System.exit(1);
-                }
             }
-        else
-            {
+        } else {
             System.err.println("Invalid argument format\n");
             showDevices(midi, mixers);
             System.exit(1);
-            }
         }
+    }
 
     /**
      * Returns the currently used Mixer
      */
     public Mixer.Info getMixer() {
         return mixer;
-        }
+    }
 
     /**
      * Sets the currently used Mixer
      */
     public void setMixer(Mixer.Info mixer) {
         try {
-            if (sdl != null)
+            if (sdl != null) {
                 sdl.stop();
+            }
             if (mixer == null) {
                 Mixer.Info[] m = getSupportedMixers();
-                if (m.length > 0)
+                if (m.length > 0) {
                     mixer = m[0];
                 }
-            if (mixer == null)
+            }
+            if (mixer == null) {
                 sdl = AudioSystem.getSourceDataLine(audioFormat);
-            else
+            } else {
                 sdl = AudioSystem.getSourceDataLine(audioFormat, mixer);
+            }
             sdl.open(audioFormat, bufferSize);
             sdl.start();
             this.mixer = mixer;
-            } catch (LineUnavailableException ex) {
+        } catch (LineUnavailableException ex) {
             throw new RuntimeException(ex);
-            }
         }
+    }
 
     /**
      * Returns the available mixers which support the given audio format.
@@ -177,39 +175,49 @@ public class Synth {
             Mixer m = AudioSystem.getMixer(info[i]);
             if (m.isLineSupported(lineInfo)) {
                 count++;
-                }
             }
+        }
 
         Mixer.Info[] options = new Mixer.Info[count];
         count = 0;
         for (int i = 0; i < info.length; i++) {
             Mixer m = AudioSystem.getMixer(info[i]);
-            if (m.isLineSupported(lineInfo))
+            if (m.isLineSupported(lineInfo)) {
                 options[count++] = info[i];
             }
-        return options;
         }
+        return options;
+    }
 
     public static final int RANDOM_INCREASE = 17;
+
     Random getNewRandom() {
         synchronized (randomLock) {
             randomSeed += RANDOM_INCREASE;  // or whatever
             return new Random(randomSeed);
-            }
         }
+    }
 
     /**
      * Sample ranges from 0 to 1
      */
     public void emitSample(double d) {
         int val = 0;
-        if (d > 1.0) d = 1.0;
-        if (d < 0.0) d = 0.0;
+        if (d > 1.0) {
+            d = 1.0;
+        }
+        if (d < 0.0) {
+            d = 0.0;
+        }
         d -= 0.5;
 
         val = (int) (d * 65536);
-        if (val > 32767) val = 32767;
-        if (val < -32768) val = -32768; 
+        if (val > 32767) {
+            val = 32767;
+        }
+        if (val < -32768) {
+            val = -32768;
+        }
 
         audioBuffer[buffpos] = (byte) (val & 255);
         audioBuffer[buffpos + 1] = (byte) ((val >> 8) & 255);
@@ -217,30 +225,27 @@ public class Synth {
         if (buffpos + 1 >= BATCH_SIZE) {
             sdl.write(audioBuffer, 0, buffpos);
             buffpos = 0;
-            }
         }
+    }
 
     private void go() {
         if (this.outputModule == null) {
             System.err.println("No output module defined: exiting");
             return;
-            }
+        }
         System.out.println("NO AUDIO FOR THE FIRST 3 SECONDS WHILE THE JIT KICKS IN!");
         while (true) {
             for (Module m : this.modules) {
                 m.doUpdate(tickCount);
-                }
+            }
             emitSample(this.outputModule.getValue());
             tickCount++;
-            }
         }
+    }
 
     /**
-       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       ==============================
-       DO NOT EDIT THIS SECTION ABOVE
-    **/
-
+     * ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ============================== DO NOT EDIT THIS SECTION ABOVE
+     **/
 
     // ADJUST THIS VALUE IF YOU GET A LOT OF GLITCHY SOUND
     private static int numSamples = 2048;
@@ -253,7 +258,7 @@ public class Synth {
      **/
     public void setup() {
         // Default values for various modules:
-             // No detuning = 0.5
+        // No detuning = 0.5
         double pitchVal = 0.5547;     // overall pitch
         double stutterVal = 0.3461;
         double resonanceVal = 0.8945;
@@ -285,12 +290,12 @@ public class Synth {
 
         // Create an overall pitch/detuner control dial
         Detuner pitch = new Detuner(midimod);
-        Dial pitchDial= new Dial(pitchVal);
+        Dial pitchDial = new Dial(pitchVal);
         pitch.setDetuneMod(pitchDial.getModule());
         modules.add(pitch);
 
         // Create Detuners for each of our oscillators
-        Detuner[] detuners = new Detuner[3] ;
+        Detuner[] detuners = new Detuner[3];
         for (int i = 0; i < 3; i++) {
             detuners[i] = new Detuner(pitch);
             modules.add(detuners[i]);
@@ -303,15 +308,15 @@ public class Synth {
         Blit blit2 = new BlitSquare();
         modules.add(blit2);
 
-        Blit blit3  = new BlitSaw();
+        Blit blit3 = new BlitSaw();
         modules.add(blit3);
 
-        Osc[] inputs = {blit1,blit2,blit3};
+        Osc[] inputs = {blit1, blit2, blit3};
         String[] inputLabels = {"BlitSaw", "BlitSquare", "BlitSaw"};
 
         //iterate over each input and create dials/mixer for them
         MixerModule mixer = new MixerModule();
-        for(int i = 0; i < inputs.length; i++) {
+        for (int i = 0; i < inputs.length; i++) {
             Dial freq = new Dial(0.5);
             Dial mix = new Dial(1.0);
 

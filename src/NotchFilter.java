@@ -1,12 +1,19 @@
-public class NotchFilter extends Filter{
+/*
+    Note: this class and other Filter subclasses (LPF, HPF, Band pass)
+    have quite a bit of redundant code and ideally would have been
+    refactored to make better use of inheritance.
+ */
 
-    private Module cutoffModule =  new ConstantValue(Utils.hzToValue(100.0));  // default no cutoffModule
+public class NotchFilter extends Filter {
+
+    private Module cutoffModule = new ConstantValue(
+        Utils.hzToValue(100.0));  // default no cutoffModule
     private double cutoff;    // 2 * pi * (cutoff freq in Hz)
     private Module resonanceMod = new ConstantValue(0.0);
-    private double Q = 1/Math.sqrt(2);   // default of no resonance
+    private double Q = 1 / Math.sqrt(2);   // default of no resonance
 
     public NotchFilter(Module input) {
-        super(input, new double[] {0,0}, new double[] {0,0}, 1);
+        super(input, new double[]{0, 0}, new double[]{0, 0}, 1);
     }
 
     @Override
@@ -16,7 +23,7 @@ public class NotchFilter extends Filter{
     }
 
     @Override
-    public void setResonanceMod (Module resonance) {
+    public void setResonanceMod(Module resonance) {
         resonanceMod = resonance;
         updateQ();
     }
@@ -35,11 +42,11 @@ public class NotchFilter extends Filter{
         double J = 4 * Q + (2 * cutoff * Config.INV_SAMPLING_RATE) + Q * K;
 
         // Calculate coefficients
-        b0 = 1/J * Q*(4 + K) ;
-        b[0] = 1/J * Q*(-8 + 2 * K);
-        b[1] = 1/J * Q*(4 + K);
-        a[0] = 1/J * (-8 * Q + Q * 2 * K);
-        a[1] = 1/J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + Q * K);
+        b0 = 1 / J * Q * (4 + K);
+        b[0] = 1 / J * Q * (-8 + 2 * K);
+        b[1] = 1 / J * Q * (4 + K);
+        a[0] = 1 / J * (-8 * Q + Q * 2 * K);
+        a[1] = 1 / J * (4 * Q - 2 * cutoff * Config.INV_SAMPLING_RATE + Q * K);
     }
 
     public double tick(long tickCount) {
