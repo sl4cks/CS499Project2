@@ -349,12 +349,14 @@ public class Synth {
         mixer.setInput(inputs);
         modules.add(mixer);
 
+        //the pattern of Blit makes this resemble a stutter pedal
         Blit trem = new Blit();
         modules.add(trem);
 
         // Add the dial for controlling the overall pitch/detune
         box.add(pitchDial.getLabelledDial("Pitch (master)"));
 
+        //control the tremolo/stutter with dial
         Dial tremFreq = new Dial(stutterVal);
         box.add(tremFreq.getLabelledDial("Stutter"));
         trem.setFrequencyMod(tremFreq.getModule());
