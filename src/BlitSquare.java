@@ -10,6 +10,7 @@ public class BlitSquare extends BPBlit {
     public double tick(long tickCount) {
         //update the previous value
         prev = square(tickCount);
+        //not scaled as scaling causes a lot of strange issues and seems to sound worse
         return prev;
     }
 }
