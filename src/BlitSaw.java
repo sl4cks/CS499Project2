@@ -22,6 +22,6 @@ public class BlitSaw extends Blit {
         //update prev
         prev = saw(tickCount);
         //return scaled value
-        return prev * 0.8 + 0.5;
+        return prev * .95 + .4;
     }
 }
