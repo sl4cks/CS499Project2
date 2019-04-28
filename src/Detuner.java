@@ -1,7 +1,8 @@
 /*
-    Module that detunes an input frequency up/down an octave
+    Module that detunes an input frequency up to up/down an octave
  */
-public class Detuner extends Module{
+
+public class Detuner extends Module {
 
     private Module frequencyMod;
     private Module detuneMod = new ConstantValue(0.5); // default no detuning
@@ -20,7 +21,7 @@ public class Detuner extends Module{
         // This maps the range 0.0 - 1.0 to 0.5 - 2.0
         // We'll use this to adjust the pitch of the oscillator by multiplying
         //    the oscillator's frequency one octave up or down.
-        double y = 4.152815 + (0.5 - 4.152815)/(1 + Math.pow(a, 2.135379));
+        double y = 4.152815 + (0.5 - 4.152815) / (1 + Math.pow(a, 2.135379));
         return frequencyMod.getValue() * y;
     }
 
