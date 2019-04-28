@@ -7,7 +7,7 @@ public class ADSR extends Module {
   MidiGate state; // 0 note off, 1 note pressed
   private int isPressed = 0;
   private int stage; //  Current stage. Attack=0, Decay=1, Sustain=2, Release=3, Done = 4
-  private double defaultRates[] = {0.999, 0.99, 1.0, 0.4, 1.0};    // defaults. stateRates[2] (sustain) and stateRates[4] (done) are always 1.0
+  private double defaultRates[] = {0.9999, 0.999, 1.0, 0.4, 1.0};    // defaults. stateRates[2] (sustain) and stateRates[4] (done) are always 1.0
   private double defaultStages[] = {.8, 0.5, 0.5, 0.0, 0.0};   // attack, decay, sustain, release, done levels. stageLevel[4] (done) always = 0
   private Module[] stageRates = new Module[5];
   private Module[] stageLevels = new Module[5];
@@ -15,8 +15,8 @@ public class ADSR extends Module {
   private double startParameter = 0.0; //p'
 
   //need to figure when to reset these values
-  private double v = 1.0; //s
-  private final double epsilon = 1e-8; //a constant to handle denormals
+  private double s = 1.0; //s
+  private final double epsilon = 1e-5; //a constant to handle denormals
 
   public ADSR(MidiGate gate) {
     this.state = gate;
@@ -47,7 +47,7 @@ public class ADSR extends Module {
 
   public void notePress() {
     stage = 0;
-    v = 1;
+    s = 1;
     startParameter = 0.0;
     currentParameter = 0.0;
     isPressed = 1;
@@ -56,7 +56,7 @@ public class ADSR extends Module {
   public void noteRelease() {
     if (stage < 3) {
       stage = 3;
-      v = 1;
+      s = 1;
       startParameter = currentParameter;
     }
     isPressed = 0;
@@ -64,13 +64,13 @@ public class ADSR extends Module {
 
   //the update algorithm from notes
   public double update() {
-    v = v * stageRates[stage].getValue();
-    if (v <= epsilon) {
-      v = 1;
+    s = s * stageRates[stage].getValue()*(2 - stageRates[stage].getValue());
+    if (s <= epsilon) {
+      s = 1;
       startParameter = currentParameter;
       stage++;
     }
-    currentParameter = v * startParameter + (1 - v) * stageLevels[stage].getValue();
+    currentParameter = s * startParameter + (1 - s) * stageLevels[stage].getValue();
     return currentParameter;
   }
 
