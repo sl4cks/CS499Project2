@@ -386,11 +386,14 @@ public class Synth {
         filter.setResonanceMod(resonance.getModule());
         modules.add(filter);
 
+
+        Module s = new ConstantValue(0.0) ;
+        modules.add(s);
+
         Oscilloscope oscope = new Oscilloscope();
         Oscilloscope.OModule omodule = oscope.getModule();
         oscope.setDelay(1);
         modules.add(omodule);
-        omodule.setAmplitudeModule(filter);
         box.add(oscope);
 
         box.add(Box.createVerticalStrut(10));
@@ -402,6 +405,7 @@ public class Synth {
         gain.setAmplitudeMod(dial.getModule());
         modules.add(gain);
 
+        omodule.setAmplitudeModule(gain);
         frame.pack();
         frame.setVisible(true);
 
