@@ -398,12 +398,6 @@ public class Synth {
 
         box.add(Box.createVerticalStrut(10));
 
-        Amplifier gateAmp = new Amplifier(filter);
-        gateAmp.setAmplitudeMod(gate);
-        modules.add(gateAmp);
-        Amplifier gain = new Amplifier(gateAmp);
-        gain.setAmplitudeMod(dial.getModule());
-        modules.add(gain);
 
         ADSR adsr = new ADSR(gate);
         String[] labels = {"Attack Rate", "Decay", "Sustain", "Release"};
@@ -423,6 +417,13 @@ public class Synth {
         }
 
         modules.add(adsr);
+
+        Amplifier gateAmp = new Amplifier(filter);
+        gateAmp.setAmplitudeMod(adsr);
+        modules.add(gateAmp);
+        Amplifier gain = new Amplifier(gateAmp);
+        gain.setAmplitudeMod(dial.getModule());
+        modules.add(gain);
 
 
         omodule.setAmplitudeModule(gain);
