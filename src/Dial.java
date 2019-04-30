@@ -7,7 +7,7 @@ import java.util.concurrent.locks.*;
 
 public class Dial extends JPanel {
 
-  public static final int LABELLED_DIAL_WIDTH = 40;
+  public static final int LABELLED_DIAL_WIDTH = 30;
   public static final float DIAL_STROKE_WIDTH = 4.0f;
   public static final Color MOD_COLOR = Color.BLACK;
   public static final BasicStroke DIAL_THIN_STROKE = new BasicStroke(DIAL_STROKE_WIDTH / 2,
