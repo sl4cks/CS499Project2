@@ -405,6 +405,26 @@ public class Synth {
         gain.setAmplitudeMod(dial.getModule());
         modules.add(gain);
 
+        ADSR adsr = new ADSR(gate);
+        String[] labels = {"Attack Rate", "Decay", "Sustain", "Release"};
+        for (int i = 0; i < 4; i++) {
+            Dial dia = new Dial(0.5);
+            box.add(dia.getLabelledDial(labels[i]));
+            if(i == 2) {
+                Dial attack = new Dial(0.5);
+                box.add(attack.getLabelledDial("Attack Level"));
+                adsr.setLevel(i, dia.getModule());
+            }
+            //check if we set sustain, a level
+            else if(i == 2)
+                adsr.setLevel(i, dia.getModule());
+            else
+                adsr.setRate(i, dia.getModule());
+        }
+
+        modules.add(adsr);
+
+
         omodule.setAmplitudeModule(gain);
         frame.pack();
         frame.setVisible(true);
